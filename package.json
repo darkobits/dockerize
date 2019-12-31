@@ -53,7 +53,7 @@
     "@types/ejs": "^2.6.3",
     "@types/fs-extra": "^8.0.1",
     "@types/jest": "^24.0.23",
-    "@types/node": "^12.12.12",
+    "@types/node": "^13.1.2",
     "@types/node-emoji": "^1.8.1",
     "@types/tar": "^4.0.1"
   }
