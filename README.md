@@ -1,11 +1,11 @@
 <a href="#top" id="top">
-  <img src="https://user-images.githubusercontent.com/441546/98974026-49326d00-24c9-11eb-84c3-9e9ec3eb44cb.png" style="max-width: 100%;">
+  <img src="https://user-images.githubusercontent.com/441546/101590073-973e7180-399e-11eb-9980-682d6a6856da.png" style="max-width: 100%;">
 </a>
 <p align="center">
-  <a href="https://www.npmjs.com/package/@darkobits/dockerize"><img src="https://img.shields.io/npm/v/@darkobits/dockerize.svg?style=for-the-badge"></a>
-  <a href="https://travis-ci.com/github/darkobits/dockerize"><img src="https://img.shields.io/travis/com/darkobits/dockerize?style=for-the-badge"></a>
-  <a href="https://david-dm.org/darkobits/dockerize"><img src="https://img.shields.io/david/darkobits/dockerize.svg?style=for-the-badge"></a>
-  <a href="https://conventionalcommits.org"><img src="https://img.shields.io/badge/conventional%20commits-1.0.0-FB5E85.svg?style=for-the-badge"></a>
+  <a href="https://www.npmjs.com/package/@darkobits/dockerize"><img src="https://img.shields.io/npm/v/@darkobits/dockerize.svg?style=flat-square"></a>
+  <a href="https://travis-ci.com/github/darkobits/dockerize"><img src="https://img.shields.io/travis/com/darkobits/dockerize?style=flat-square"></a>
+  <a href="https://david-dm.org/darkobits/dockerize"><img src="https://img.shields.io/david/darkobits/dockerize.svg?style=flat-square"></a>
+  <a href="https://conventionalcommits.org"><img src="https://img.shields.io/badge/conventional%20commits-1.0.0-FB5E85.svg?style=flat-square"></a>
 </p>
 
 This package aims to make containerizing a Node project as straightforward as using `npm publish`. It leverages `npm pack` (used internally by `npm publish`) to determine which files are production-relevant and existing standards for determining a project's entrypoint, namely the `"main"` and `"bin"` `package.json` fields.
