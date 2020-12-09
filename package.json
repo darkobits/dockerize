@@ -34,9 +34,9 @@
   },
   "dependencies": {
     "@darkobits/chex": "^0.1.8",
-    "@darkobits/log": "^2.0.0-beta.14",
+    "@darkobits/log": "^2.0.0-beta.15",
     "@darkobits/node-versions": "^1.0.2",
-    "@darkobits/saffron": "^0.1.12",
+    "@darkobits/saffron": "^0.1.14",
     "bytes": "^3.1.0",
     "ejs": "^3.1.5",
     "find-up": "^5.0.0",
@@ -48,12 +48,10 @@
     "tempy": "^1.0.0"
   },
   "devDependencies": {
-    "@darkobits/ts": "^0.1.0-beta.11",
+    "@darkobits/ts": "^0.1.5",
     "@types/bytes": "^3.1.0",
     "@types/ejs": "^3.0.5",
     "@types/fs-extra": "^9.0.4",
-    "@types/jest": "^26.0.15",
-    "@types/node": "^14.14.9",
     "@types/node-emoji": "^1.8.1",
     "@types/tar": "^4.0.4"
   }

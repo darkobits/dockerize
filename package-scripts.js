@@ -1,1 +1,1 @@
-module.exports = require('@darkobits/ts/package-scripts')();
+module.exports = require('@darkobits/ts').nps();

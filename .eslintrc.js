@@ -1,5 +1,3 @@
 module.exports = {
-  extends: [
-    require.resolve('@darkobits/ts/eslint')
-  ]
+  extends: require('@darkobits/ts').eslint
 };
