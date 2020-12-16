@@ -33,25 +33,25 @@
     "prepare": "nps prepare"
   },
   "dependencies": {
-    "@darkobits/chex": "^0.1.8",
+    "@darkobits/chex": "^0.1.10",
     "@darkobits/log": "^2.0.0-beta.15",
-    "@darkobits/node-versions": "^1.0.2",
-    "@darkobits/saffron": "^0.1.14",
+    "@darkobits/node-versions": "^1.0.4",
+    "@darkobits/saffron": "^0.1.15",
     "bytes": "^3.1.0",
     "ejs": "^3.1.5",
     "find-up": "^5.0.0",
     "fs-extra": "^9.0.1",
     "node-emoji": "^1.10.0",
-    "ow": "^0.19.0",
+    "ow": "^0.20.0",
     "read-pkg-up": "^7.0.1",
     "tar": "^6.0.5",
     "tempy": "^1.0.0"
   },
   "devDependencies": {
-    "@darkobits/ts": "^0.1.5",
+    "@darkobits/ts": "^0.2.0",
     "@types/bytes": "^3.1.0",
     "@types/ejs": "^3.0.5",
-    "@types/fs-extra": "^9.0.4",
+    "@types/fs-extra": "^9.0.5",
     "@types/node-emoji": "^1.8.1",
     "@types/tar": "^4.0.4"
   }
