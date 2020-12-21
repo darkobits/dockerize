@@ -1,6 +1,6 @@
 {
   "name": "@darkobits/dockerize",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Easily Dockerize Node projects.",
   "license": "WTFPL",
   "author": "darkobits",

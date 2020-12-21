@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.9](https://github.com/darkobits/dockerize/compare/v0.2.8...v0.2.9) (2020-12-21)
+
+
+### 📖 Documentation
+
+* Update README. ([8fed6bb](https://github.com/darkobits/dockerize/commit/8fed6bb16e0e385895023a4779b511c20a714306))
+
+
+### 🏗 Chores
+
+* Update dependencies. ([7458908](https://github.com/darkobits/dockerize/commit/7458908ee276981d795e7383e078aba4874cf9bc))
+
 ### [0.2.8](https://github.com/darkobits/dockerize/compare/v0.2.7...v0.2.8) (2020-12-16)
 
 
