@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [1.0.0](https://github.com/darkobits/dockerize/compare/v0.2.10...v1.0.0) (2021-05-13)
 
+This release contains no breaking changes.
 
 ### 📖 Documentation
 
