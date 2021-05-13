@@ -4,8 +4,8 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/@darkobits/dockerize"><img src="https://img.shields.io/npm/v/@darkobits/dockerize.svg?style=flat-square"></a>
   <a href="https://github.com/darkobits/dockerize/actions?query=workflow%3ACI"><img src="https://img.shields.io/github/workflow/status/darkobits/dockerize/CI/master?style=flat-square"></a>
-  <a href="https://david-dm.org/darkobits/dockerize"><img src="https://img.shields.io/david/darkobits/dockerize.svg?style=flat-square"></a>
-  <a href="https://github.com/conventional-changelog/standard-version"><img src="https://img.shields.io/badge/conventional%20commits-1.0.0-027dc6.svg?style=flat-square"></a>
+  <a href="https://depfu.com/github/darkobits/dockerize"><img src="https://img.shields.io/depfu/darkobits/dockerize?style=flat-square"></a>
+  <a href="https://conventionalcommits.org"><img src="https://img.shields.io/static/v1?label=commits&message=conventional&style=flat-square&color=398AFB"></a>
 </p>
 
 This package aims to make containerizing a Node project as straightforward as using `npm publish`. It leverages `npm pack` (used internally by `npm publish`) to determine which files are production-relevant and existing standards for determining a project's entrypoint, namely the `"main"` and `"bin"` `package.json` fields.
