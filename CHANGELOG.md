@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/darkobits/dockerize/compare/v0.2.10...v1.0.0) (2021-05-13)
+
+
+### 📖 Documentation
+
+* Update README. ([77515b0](https://github.com/darkobits/dockerize/commit/77515b00c4bc70b1a281c977f1a3fd458d5d555a))
+
+
+### 🏗 Chores
+
+* **deps:** bump handlebars from 4.7.6 to 4.7.7 ([#124](https://github.com/darkobits/dockerize/issues/124)) ([b7e210f](https://github.com/darkobits/dockerize/commit/b7e210fff2afeccb507582b06cf98523a1eb0c19))
+* **deps:** bump hosted-git-info from 2.8.8 to 2.8.9 ([#126](https://github.com/darkobits/dockerize/issues/126)) ([9ea3f53](https://github.com/darkobits/dockerize/commit/9ea3f53aed23e78ecfc7614b16b99a9a896c3370))
+* **deps:** bump lodash from 4.17.20 to 4.17.21 ([#125](https://github.com/darkobits/dockerize/issues/125)) ([6a657aa](https://github.com/darkobits/dockerize/commit/6a657aa777fb5b0a37c5c535b517ae8fb736fd6a))
+* **deps:** Update dependencies. ([624a590](https://github.com/darkobits/dockerize/commit/624a59028ee6cafc5b30024236f91c0aafd5b48e))
+
 ### [0.2.10](https://github.com/darkobits/dockerize/compare/v0.2.9...v0.2.10) (2020-12-24)
 
 
