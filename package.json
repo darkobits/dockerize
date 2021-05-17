@@ -35,7 +35,7 @@
   "dependencies": {
     "@darkobits/chex": "^1.0.1",
     "@darkobits/log": "^2.0.0-beta.15",
-    "@darkobits/node-versions": "^1.0.5",
+    "@darkobits/node-versions": "^1.0.6",
     "@darkobits/saffron": "^0.1.16",
     "bytes": "^3.1.0",
     "ejs": "^3.1.5",
