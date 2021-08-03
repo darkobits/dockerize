@@ -44,7 +44,7 @@
     "node-emoji": "^1.10.0",
     "ow": "^0.23.0",
     "read-pkg-up": "^7.0.1",
-    "tar": "^6.1.0",
+    "tar": "^6.1.3",
     "tempy": "^1.0.0"
   },
   "devDependencies": {
