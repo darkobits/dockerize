@@ -4,7 +4,8 @@ FROM ubuntu:<%= ubuntuVersion %> as base
 ENV PATH=/tmp/node/bin:$PATH
 
 RUN \
-  apt-get update && apt-get install --yes curl && \
+  apt-get update && \
+  apt-get install --yes curl && \
   # Download Tini.
   curl --silent --fail --location --output /tmp/tini https://github.com/krallin/tini/releases/download/v<%= tiniVersion %>/tini && \
   chmod +x /tmp/tini && \

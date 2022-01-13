@@ -60,7 +60,7 @@ export default async function dockerize(options: DockerizeOptions) {
   /**
    * Ubuntu version to use as a base image.
    */
-  const ubuntuVersion = options.ubuntuVersion ?? '20.10';
+  const ubuntuVersion = options.ubuntuVersion ?? '22.04';
 
   /**
    * Tag that will be applied to the image.
@@ -193,6 +193,9 @@ export default async function dockerize(options: DockerizeOptions) {
 
   const dockerBuildArgs = [
     '--rm',
+    // Needed for M1 Macs.
+    // See: https://stackoverflow.com/questions/68630526/lib64-ld-linux-x86-64-so-2-no-such-file-or-directory-error
+    '--platform=linux/x86_64',
     `--tag=${tag}`,
     `--label=NODE_VERSION=${nodeVersion}`,
     `--label=TINI_VERSION=${DEFAULT_TINI_VERSION}`,
@@ -203,31 +206,32 @@ export default async function dockerize(options: DockerizeOptions) {
 
   // ----- [9] Log Build Metadata ----------------------------------------------
 
-  log.info(`${emoji.get('whale')}  Dockerizing package ${log.chalk.green(pkg.package.name)}.`);
+  log.info(`${emoji.get('whale')} Dockerizing package ${log.chalk.green(pkg.package.name)}.`);
 
-  log.verbose(`- Package Root: ${log.chalk.green(pkg.root)}`);
-  log.verbose(`- Staging Directory: ${log.chalk.green(stagingDir)}`);
+  log.verbose(`-> Package Root: ${log.chalk.green(pkg.root)}`);
+  log.verbose(`-> Staging Directory: ${log.chalk.green(stagingDir)}`);
 
   if (extraArgs) {
-    log.verbose(`- Extra Docker Args: ${extraArgs}`);
+    log.verbose(`-> Extra Docker Args: ${extraArgs}`);
   }
 
-  log.verbose(`- Docker Command: "docker build ${options.cwd} ${dockerBuildArgs}"`);
+  const dockerBuildCommand = `docker build ${options.cwd} ${dockerBuildArgs}`;
+  log.verbose(`-> Docker Command: ${log.chalk.dim(dockerBuildCommand)}`);
 
   if (finalDockerfileSourcePath) {
-    log.info(`- Dockerfile: ${log.chalk.green(finalDockerfileSourcePath)}`);
+    log.info(`-> Dockerfile: ${log.chalk.green(finalDockerfileSourcePath)}`);
   }
 
-  log.info(`- Entrypoint: ${log.chalk.green(entry)}`);
-  log.info(`- Node Version: ${log.chalk.green(nodeVersion)}`);
-  log.info(`- Lockfile: ${log.chalk[hasLockfile ? 'green' : 'yellow'](String(hasLockfile))}`);
+  log.info(`-> Entrypoint: ${log.chalk.green(entry)}`);
+  log.info(`-> Node Version: ${log.chalk.green(nodeVersion)}`);
+  log.info(`-> Lockfile: ${log.chalk[hasLockfile ? 'green' : 'yellow'](String(hasLockfile))}`);
 
   if (envVars.length > 0) {
-    log.info('- Environment Variables:');
+    log.info('-> Environment Variables:');
 
     envVars.forEach(varExpression => {
       const [key, value] = varExpression.split('=');
-      log.info(`  - ${key}=${value}`);
+      log.info(`  -  ${key}=${value}`);
     });
   }
 
@@ -243,17 +247,7 @@ export default async function dockerize(options: DockerizeOptions) {
 
   // ----- [10] Pack Package ---------------------------------------------------
 
-  const spinner = log.createSpinner();
-
-  let endBuildInteractive;
-
-  const buildMessage = `Building image ${log.chalk.cyan(tag)}...`;
-
-  if (log.isLevelAtLeast('silly')) {
-    log.info(buildMessage);
-  } else {
-    endBuildInteractive = log.beginInteractive(() => log.info(`${spinner} ${buildMessage}`));
-  }
+  log.info(`Building image ${log.chalk.cyan(tag)}...`);
 
   // Copy production-relevant package files to the staging directory.
   await packAndExtractPackage(npm, pkg.root, stagingDir);
@@ -287,14 +281,8 @@ export default async function dockerize(options: DockerizeOptions) {
     fs.remove(stagingDir)
   ]);
 
-  const endBuildMessage = `${emoji.get('checkered_flag')}  Built image ${log.chalk.cyan(tag)} ${log.chalk.dim(`(${imageSize})`)} in ${buildTime}.`;
-
-  if (endBuildInteractive) {
-    endBuildInteractive(() => log.info(endBuildMessage));
-  } else {
-    log.info(endBuildMessage);
-  }
-
+  log.info(`Image size: ${log.chalk.dim(`${imageSize}`)}`);
+  log.info(`Done in ${buildTime}. ${emoji.get('sparkles')}`);
 
   // ----- [13] (Optional) Push Image ------------------------------------------
 
@@ -304,15 +292,7 @@ export default async function dockerize(options: DockerizeOptions) {
 
   const pushTime = log.createTimer();
 
-  let endPushInteractive;
-
-  const pushMessage = `Pushing image ${log.chalk.cyan(tag)}...`;
-
-  if (log.isLevelAtLeast('silly')) {
-    log.info(pushMessage);
-  } else {
-    endPushInteractive = log.beginInteractive(() => log.info(`${spinner} ${pushMessage}`));
-  }
+  log.info(`Pushing image ${log.chalk.cyan(tag)}...`);
 
   const pushProcess = docker(['push', tag], {
     stdin: 'ignore',
@@ -330,11 +310,5 @@ export default async function dockerize(options: DockerizeOptions) {
 
   await pushProcess;
 
-  const endPushMessage = `${emoji.get('rocket')}  Pushed image ${log.chalk.cyan(tag)} in ${pushTime}.`;
-
-  if (endPushInteractive) {
-    endPushInteractive(() => log.info(endPushMessage));
-  } else {
-    log.info(endPushMessage);
-  }
+  log.info(`${emoji.get('rocket')}  Pushed image ${log.chalk.cyan(tag)} in ${pushTime}.`);
 }
