@@ -27,32 +27,32 @@
   },
   "main": "dist/index.js",
   "scripts": {
-    "build": "nps build",
-    "test": "nps test",
-    "bump": "nps bump",
-    "prepare": "nps prepare"
+    "build": "nr build",
+    "test": "nr test",
+    "bump": "nr bump",
+    "prepare": "nr prepare"
   },
   "dependencies": {
-    "@darkobits/chex": "^1.0.1",
+    "@darkobits/chex": "^1.0.2",
     "@darkobits/log": "^2.0.0-beta.15",
-    "@darkobits/node-versions": "^1.0.5",
-    "@darkobits/saffron": "^0.1.16",
-    "bytes": "^3.1.0",
-    "ejs": "^3.1.5",
+    "@darkobits/node-versions": "^1.0.7",
+    "@darkobits/saffron": "^0.4.3",
+    "bytes": "^3.1.1",
+    "ejs": "^3.1.6",
     "find-up": "^5.0.0",
     "fs-extra": "^10.0.0",
-    "node-emoji": "^1.10.0",
-    "ow": "^0.23.0",
+    "node-emoji": "^1.11.0",
+    "ow": "^0.28.1",
     "read-pkg-up": "^7.0.1",
-    "tar": "^6.1.0",
+    "tar": "^6.1.11",
     "tempy": "^1.0.0"
   },
   "devDependencies": {
-    "@darkobits/ts": "^0.3.3",
-    "@types/bytes": "^3.1.0",
-    "@types/ejs": "^3.0.5",
-    "@types/fs-extra": "^9.0.6",
+    "@darkobits/ts": "^0.8.12",
+    "@types/bytes": "^3.1.1",
+    "@types/ejs": "^3.1.0",
+    "@types/fs-extra": "^9.0.13",
     "@types/node-emoji": "^1.8.1",
-    "@types/tar": "^4.0.4"
+    "@types/tar": "^6.1.1"
   }
 }

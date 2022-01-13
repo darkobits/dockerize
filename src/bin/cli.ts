@@ -1,12 +1,18 @@
 #!/usr/bin/env node
 
 import os from 'os';
+
 import cli from '@darkobits/saffron';
+
 import { DockerizeOptions } from 'etc/types';
 import dockerize from 'lib/dockerize';
 import log from 'lib/log';
 
 
+/**
+ * Singularize `labels` for CLI options. Multiple labels can be applied by using
+ * the flag more than once.
+ */
 interface DockerizeArguments extends Omit<DockerizeOptions, 'labels'> {
   label: DockerizeOptions['labels'];
 }
@@ -113,7 +119,7 @@ cli.command<DockerizeArguments>({
         npmrc: argv.npmrc,
         push: argv.push
       });
-    } catch (err) {
+    } catch (err: any) {
       let message: string;
       let stackLines: Array<string>;
 

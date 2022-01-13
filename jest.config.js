@@ -1,4 +1,6 @@
-module.exports = require('@darkobits/ts').jest({
+import { jest } from '@darkobits/ts';
+
+export default jest({
   coverageThreshold: {
     global: {
       branches: 90,

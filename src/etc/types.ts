@@ -20,58 +20,58 @@ export interface DockerizeOptions {
    *
    * Default: <package name>
    */
-  tag?: string;
+  tag?: string | undefined;
 
   /**
    * Version of NodeJS that will be installed in the container.
    *
    * Default: LTS (see nodejs.org)
    */
-  nodeVersion?: string;
+  nodeVersion?: string | undefined;
 
   /**
    * Ubuntu version to use as a base image.
    *
    * Default: 20.10
    */
-  ubuntuVersion?: string;
+  ubuntuVersion?: string | undefined;
 
   /**
    * Additional labels to apply to the image.
    *
    * See: https://docs.docker.com/engine/reference/commandline/build/
    */
-  labels?: Array<string>;
+  labels?: Array<string> | undefined;
 
   /**
    * Environment variables to set in the image.
    *
    * See: https://docs.docker.com/engine/reference/builder/#env
    */
-  env?: Array<string>;
+  env?: Array<string> | undefined;
 
   /**
    * Extra command-line arguments to pass to `docker build`.
    *
    * See: https://docs.docker.com/engine/reference/commandline/build/
    */
-  extraArgs?: string;
+  extraArgs?: string | undefined;
 
   /**
    * Path to a custom Dockerfile to use.
    */
-  dockerfile?: string;
+  dockerfile?: string | undefined;
 
   /**
    * Path to an .npmrc file to use when installing dependencies in the image.
    * This file will be removed from the final image.
    */
-  npmrc?: string;
+  npmrc?: string | undefined;
 
   /**
    * Whether to run 'docker push' after building an image.
    *
    * Note: This option assumes 'docker login' has already been run.
    */
-  push?: boolean;
+  push?: boolean | undefined;
 }

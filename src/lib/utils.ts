@@ -1,7 +1,7 @@
 import path from 'path';
 
 import chex from '@darkobits/chex';
-import nodeVersons from '@darkobits/node-versions';
+import nodeVersions from '@darkobits/node-versions';
 import bytes from 'bytes';
 import ejs from 'ejs';
 import findUp from 'find-up';
@@ -160,7 +160,7 @@ export async function renderTemplate({template, dest, data}: RenderTemplateOptio
 export async function packAndExtractPackage(npm: ThenArg<ReturnType<typeof chex>>, pkgRoot: string, destDir: string) {
   // Use `npm pack` to create a tarball of all files that would normally be
   // included when publishing the package.
-  const tarballName = (await npm(['pack', '--ignore-scripts'], {cwd: pkgRoot})).stdout;
+  const { stdout: tarballName } = await npm(['pack', '--ignore-scripts'], { cwd: pkgRoot });
 
   const tarballPath = path.resolve(pkgRoot, tarballName);
 
@@ -221,6 +221,6 @@ export async function getImageSize(docker: ThenArg<ReturnType<typeof chex>>, ima
  * Returns the current LTS version of NodeJS.
  */
 export async function getNodeLtsVersion() {
-  const versions = await nodeVersons();
+  const versions = await nodeVersions();
   return versions.lts.version.full;
 }

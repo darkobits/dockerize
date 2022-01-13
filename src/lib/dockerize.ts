@@ -6,10 +6,9 @@ import emoji from 'node-emoji';
 import ow from 'ow';
 import tempy from 'tempy';
 
-import {DEFAULT_TINI_VERSION} from 'etc/constants';
-import {DockerizeOptions} from 'etc/types';
+import { DEFAULT_TINI_VERSION } from 'etc/constants';
+import { DockerizeOptions } from 'etc/types';
 import log from 'lib/log';
-
 import {
   computePackageEntry,
   computeTag,
@@ -49,7 +48,7 @@ export default async function dockerize(options: DockerizeOptions) {
   // ----- [2] Introspect Host Package -----------------------------------------
 
   // Get the path to the package's package.json and create the staging area.
-  const pkg = await pkgInfo({cwd: options.cwd});
+  const pkg = await pkgInfo({ cwd: options.cwd });
 
   // Compute path to the package's entrypoint ("bin" or "main"). This will be
   // used as the ENTRYPOINT in the final image.
@@ -139,7 +138,7 @@ export default async function dockerize(options: DockerizeOptions) {
       await fs.access(absoluteCustomDockerfilePath);
       finalDockerfileSourcePath = absoluteCustomDockerfilePath;
       await fs.copy(absoluteCustomDockerfilePath, targetDockerfilePath);
-    } catch (err) {
+    } catch (err: any) {
       throw new Error(`Error reading custom Dockerfile: ${err.message}`);
     }
   }

@@ -1,22 +1,24 @@
-name: CI
+name: ci
 on:
   - push
   - pull_request
+env:
+  FORCE_COLOR: 3
 jobs:
-  CI:
-    name: Build
+  ci:
+    name: CI
     runs-on: ubuntu-latest
     steps:
       - name: Fetch Repository
         uses: actions/checkout@v2
         with:
-          # Ensures we fetch all tags.
           fetch-depth: 0
       - name: Set Up Node
         uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 16
+          cache: npm
       - name: Install Dependencies
-        run: npm ci --ignore-scripts
+        run: npm ci
       - name: Build Project
-        run: npx nps build
+        run: npx nr build
