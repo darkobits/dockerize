@@ -8,7 +8,8 @@
   <a href="https://conventionalcommits.org"><img src="https://img.shields.io/static/v1?label=commits&message=conventional&style=flat-square&color=398AFB"></a>
 </p>
 
-Make containerizing a Node project as straightforward as using `npm publish`. No `Dockerfile` required.
+Dockerize aims to make containerizing a Node project as straightforward as using `npm publish`.
+No `Dockerfile` required.
 
 This project uses idiomatic standards (ie: `"files"`, `"main"`, `"bin"` in `package.json`) to determine
 which files in a project are production-relevant. It uses `npm pack` under the hood, which is what
@@ -116,9 +117,11 @@ Optional path to a custom `Dockerfile` to use. If not provided, Dockerize will l
 in the root of the build context (see `cwd` argument above). If the build context does not contain a
 `Dockerfile`, Dockerize will programmatically generate one for you with the following properties:
 
-* The [Ubuntu 19.04 image](https://hub.docker.com/_/ubuntu) will be used as a base, which is "minimal" by default and therefore relatively small.
+* The [Ubuntu 19.04 image](https://hub.docker.com/_/ubuntu) will be used as a base, which is "minimal"
+  by default and therefore relatively small.
 * The [current LTS version of Node](https://nodejs.org) will be installed. (See `--node-version` below.)
-* The [Tini](https://github.com/krallin/tini) process manager will be installed and configured to ensure proper handling of POSIX signals. This is considered a best practice when using Node in Docker.
+* The [Tini](https://github.com/krallin/tini) process manager will be installed and configured to ensure
+  proper handling of POSIX signals. This is considered a best practice when using Node in Docker.
 
 **Example:**
 
@@ -284,11 +287,16 @@ single options object per the above specification.
 import Dockerize from '@darkobits/dockerize';
 
 await Dockerize({
-  nodeVersion: '14.15.0',
-  // These options should use the singular form for their key, but their values may be strings
-  // or arrays of strings.
-  label: ['foo=bar', 'baz=qux'],
-  env: ['EDITOR=vim']
+  cwd: './my-project',
+  nodeVersion: '16.13.1',
+  labels: [
+    'foo=bar',
+    'baz=qux',
+    'kittens=true'
+  ],
+  env: [
+    'NODE_ENV=production'
+  ]
 });
 ```
 
@@ -299,5 +307,5 @@ additional logging.
 
 <br />
 <a href="#top">
-  <img src="https://user-images.githubusercontent.com/441546/118062198-4ff04e80-b34b-11eb-87f3-406a345d5526.png" style="max-width: 100%;">
+  <img src="https://user-images.githubusercontent.com/441546/102322726-5e6d4200-3f34-11eb-89f2-c31624ab7488.png" style="max-width: 100%;">
 </a>
