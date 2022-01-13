@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.1](https://github.com/darkobits/dockerize/compare/v1.0.0...v1.0.1) (2022-01-13)
+
+
+### 📖 Documentation
+
+* Update README. ([d22ae7f](https://github.com/darkobits/dockerize/commit/d22ae7fc117b5a229f9aefd75cc5427e2534bf85))
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([b0bf807](https://github.com/darkobits/dockerize/commit/b0bf807ace936e91b5f595f2524d835b1760ba10))
+* **docs:** Update CHANGELOG. ([cdce8de](https://github.com/darkobits/dockerize/commit/cdce8deb30f6e103c901ba0f07e22d97d02d598a))
+
+
+### 🛠 Refactoring
+
+* Better error-handling when Docker daemon is not running. ([fe09b5a](https://github.com/darkobits/dockerize/commit/fe09b5ac237b69789095331de56756cb051a6eb4))
+
 ## [1.0.0](https://github.com/darkobits/dockerize/compare/v0.2.10...v1.0.0) (2021-05-13)
 
 This release contains no breaking changes.
