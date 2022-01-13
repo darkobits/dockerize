@@ -134,7 +134,7 @@ cli.command<DockerizeArguments>({
       log.error(message);
       log.verbose(stackLines.join(os.EOL));
 
-      throw err;
+      process.exit(1);
     }
   }
 });

@@ -88,14 +88,28 @@ export default async function dockerize(options: DockerizeOptions) {
   const customDockerfile = options.dockerfile;
 
 
-  // ----- [4] Prepare Staging Area --------------------------------------------
+  // ----- [4] Ensure Docker Daemon is Running ---------------------------------
+
+  try {
+    await docker('info');
+  } catch (err: any) {
+    const search = 'ERROR:';
+    if (err.stdout.includes(search)) {
+      const idx = err.stdout.indexOf(search) as number;
+      const message = err.stdout.slice(idx + search.length).trim();
+      throw new Error(message);
+    }
+  }
+
+
+  // ----- [5] Prepare Staging Area --------------------------------------------
 
   // Get path to a random temporary directory we will use as our staging area.
   const stagingDir = tempy.directory();
   await fs.ensureDir(stagingDir);
 
 
-  // ----- [5] Compute Node Version, Copy .npmrc, Copy Lockfile ----------------
+  // ----- [6] Compute Node Version, Copy .npmrc, Copy Lockfile ----------------
 
   const [
     /**
@@ -121,7 +135,7 @@ export default async function dockerize(options: DockerizeOptions) {
   ]);
 
 
-  // ----- [6] Determine Dockerfile Strategy -----------------------------------
+  // ----- [7] Determine Dockerfile Strategy -----------------------------------
 
   // Path where we want the final Dockerfile to be.
   const targetDockerfilePath = path.join(stagingDir, 'Dockerfile');
@@ -130,7 +144,7 @@ export default async function dockerize(options: DockerizeOptions) {
   // generated one.
   let finalDockerfileSourcePath: string | undefined;
 
-  // [6a] If a `--dockerfile` argument was provided, use the Dockerfile at that
+  // [7a] If a `--dockerfile` argument was provided, use the Dockerfile at that
   // path.
   if (customDockerfile) {
     try {
@@ -143,7 +157,7 @@ export default async function dockerize(options: DockerizeOptions) {
     }
   }
 
-  // [6b] Otherwise, if a Dockerfile is present in the build context, use it.
+  // [7b] Otherwise, if a Dockerfile is present in the build context, use it.
   if (!finalDockerfileSourcePath) {
     try {
       const contextDockerfilePath = path.resolve(options.cwd, 'Dockerfile');
@@ -156,7 +170,7 @@ export default async function dockerize(options: DockerizeOptions) {
     }
   }
 
-  // [6c] Otherwise, programmatically generate a Dockerfile and place it in the
+  // [7c] Otherwise, programmatically generate a Dockerfile and place it in the
   // build context.
   if (!finalDockerfileSourcePath) {
     await renderTemplate({
@@ -175,7 +189,7 @@ export default async function dockerize(options: DockerizeOptions) {
   }
 
 
-  // ----- [7] Construct Docker Command ----------------------------------------
+  // ----- [8] Construct Docker Command ----------------------------------------
 
   const dockerBuildArgs = [
     '--rm',
@@ -187,7 +201,7 @@ export default async function dockerize(options: DockerizeOptions) {
   ].filter(Boolean).join(' ');
 
 
-  // ----- [8] Log Build Metadata ----------------------------------------------
+  // ----- [9] Log Build Metadata ----------------------------------------------
 
   log.info(`${emoji.get('whale')}  Dockerizing package ${log.chalk.green(pkg.package.name)}.`);
 
@@ -227,7 +241,7 @@ export default async function dockerize(options: DockerizeOptions) {
   }
 
 
-  // ----- [9] Pack Package ----------------------------------------------------
+  // ----- [10] Pack Package ---------------------------------------------------
 
   const spinner = log.createSpinner();
 
@@ -245,7 +259,7 @@ export default async function dockerize(options: DockerizeOptions) {
   await packAndExtractPackage(npm, pkg.root, stagingDir);
 
 
-  // ----- [10] Build Image ----------------------------------------------------
+  // ----- [11] Build Image ----------------------------------------------------
 
   const buildProcess = docker(`build . ${dockerBuildArgs}`, {
     cwd: stagingDir,
@@ -266,7 +280,7 @@ export default async function dockerize(options: DockerizeOptions) {
   await buildProcess;
 
 
-  // ----- [11] Compute Image Size & Clean Up ----------------------------------
+  // ----- [12] Compute Image Size & Clean Up ----------------------------------
 
   const [imageSize] = await Promise.all([
     getImageSize(docker, tag),
@@ -282,7 +296,7 @@ export default async function dockerize(options: DockerizeOptions) {
   }
 
 
-  // ----- [12] (Optional) Push Image ------------------------------------------
+  // ----- [13] (Optional) Push Image ------------------------------------------
 
   if (!options.push) {
     return;
