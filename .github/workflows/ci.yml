@@ -36,8 +36,3 @@ jobs:
         run: npx nr build
       - name: Test
         run: npx nr test
-      - name: Release
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx nr release
