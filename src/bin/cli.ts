@@ -4,6 +4,7 @@ import os from 'os';
 
 import cli from '@darkobits/saffron';
 
+import { DEFAULT_UBUNTU_VERSION } from 'etc/constants';
 import { DockerizeOptions } from 'etc/types';
 import dockerize from 'lib/dockerize';
 import log from 'lib/log';
@@ -44,7 +45,7 @@ cli.command<DockerizeArguments>({
 
     command.option('ubuntu-version', {
       group: 'Optional Arguments:',
-      description: 'Ubuntu version to use as a base image. [Default: 20.10]',
+      description: `Ubuntu version to use as a base image. [Default: ${DEFAULT_UBUNTU_VERSION}]`,
       required: false,
       type: 'string',
       conflicts: ['dockerfile']
@@ -67,7 +68,7 @@ cli.command<DockerizeArguments>({
 
     command.option('extra-args', {
       group: 'Optional Arguments:',
-      description: 'Optional extra arguments to pass to "docker build". This is treated as a single string and should be quoted.',
+      description: 'Optional extra arguments to pass to "docker build".\nThis is treated as a single string and should be quoted.',
       required: false,
       type: 'string'
     });

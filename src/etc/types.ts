@@ -1,7 +1,7 @@
 /**
  * Gets the inner type from a type wrapped in Promise.
  */
-export type ThenArg<T> = T extends Promise<infer U> ? U : T;
+export type ThenArg<P> = P extends Promise<infer U> ? U : P;
 
 
 /**

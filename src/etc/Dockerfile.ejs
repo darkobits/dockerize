@@ -18,7 +18,7 @@ RUN \
 WORKDIR /home/app
 
 # Copy manifests and build artifacts.
-COPY package /home/app
+COPY ./ /home/app
 
 # Conditionally copy .npmrc.
 <% if (hasNpmrc) { %>
@@ -26,7 +26,7 @@ COPY .npmrc .npmrc
 <% } %>
 
 # Install production dependencies.
-RUN npm <%= hasLockfile ? 'ci' : 'install' %> --production --skip-optional --ignore-scripts
+RUN npm <%= hasLockfile ? 'ci' : 'install' %> --omit dev --skip-optional --ignore-scripts
 
 # Stage 2
 FROM gcr.io/distroless/cc

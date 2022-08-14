@@ -1,14 +1,18 @@
 import path from 'path';
 
 import chex from '@darkobits/chex';
+import { dirname } from '@darkobits/fd-name';
 import fs from 'fs-extra';
 import emoji from 'node-emoji';
-import ow from 'ow';
 import tempy from 'tempy';
 
-import { DEFAULT_TINI_VERSION } from 'etc/constants';
+import {
+  DEFAULT_TINI_VERSION,
+  DEFAULT_UBUNTU_VERSION
+} from 'etc/constants';
 import { DockerizeOptions } from 'etc/types';
 import log from 'lib/log';
+import ow from 'lib/ow';
 import {
   computePackageEntry,
   computeTag,
@@ -17,7 +21,7 @@ import {
   ensureArray,
   getImageSize,
   getNodeLtsVersion,
-  packAndExtractPackage,
+  copyPackFiles,
   parseLabels,
   pkgInfo,
   renderTemplate
@@ -28,7 +32,7 @@ export default async function dockerize(options: DockerizeOptions) {
   const buildTime = log.createTimer();
 
   // Ensure Docker and NPM are installed.
-  const [docker, npm] = await Promise.all([chex('docker'), chex('npm')]);
+  const docker = await chex('docker');
 
 
   // ----- [1] Validate Options ------------------------------------------------
@@ -60,7 +64,7 @@ export default async function dockerize(options: DockerizeOptions) {
   /**
    * Ubuntu version to use as a base image.
    */
-  const ubuntuVersion = options.ubuntuVersion ?? '22.04';
+  const ubuntuVersion = options.ubuntuVersion ?? DEFAULT_UBUNTU_VERSION;
 
   /**
    * Tag that will be applied to the image.
@@ -131,7 +135,7 @@ export default async function dockerize(options: DockerizeOptions) {
     // N.B. These two files are not included in `npm pack`, so we have to copy
     // them explicitly.
     copyNpmrc(options.npmrc, stagingDir),
-    copyPackageLockfile(pkg.root, path.join(stagingDir, 'package'))
+    copyPackageLockfile(pkg.root, stagingDir)
   ]);
 
 
@@ -173,8 +177,11 @@ export default async function dockerize(options: DockerizeOptions) {
   // [7c] Otherwise, programmatically generate a Dockerfile and place it in the
   // build context.
   if (!finalDockerfileSourcePath) {
+    const ourDirectory = dirname();
+    if (!ourDirectory) throw new Error('Unable to compute path to the current directory.');
+
     await renderTemplate({
-      template: path.join(__dirname, '..', 'etc', 'Dockerfile.ejs'),
+      template: path.join(ourDirectory, '..', 'etc', 'Dockerfile.ejs'),
       dest: targetDockerfilePath,
       data: {
         entry,
@@ -208,41 +215,53 @@ export default async function dockerize(options: DockerizeOptions) {
 
   log.info(`${emoji.get('whale')} Dockerizing package ${log.chalk.green(pkg.package.name)}.`);
 
-  log.verbose(`-> Package Root: ${log.chalk.green(pkg.root)}`);
-  log.verbose(`-> Staging Directory: ${log.chalk.green(stagingDir)}`);
+  log.verbose(`${log.chalk.gray.dim('├─')} Package Root: ${log.chalk.green(pkg.root)}`);
+  log.verbose(`${log.chalk.gray.dim('├─')} Staging Directory: ${log.chalk.green(stagingDir)}`);
 
   if (extraArgs) {
-    log.verbose(`-> Extra Docker Args: ${extraArgs}`);
+    log.verbose(`${log.chalk.gray.dim('├─')}Extra Docker Args: ${extraArgs}`);
   }
 
   const dockerBuildCommand = `docker build ${options.cwd} ${dockerBuildArgs}`;
-  log.verbose(`-> Docker Command: ${log.chalk.dim(dockerBuildCommand)}`);
+  log.verbose(`${log.chalk.gray.dim('├─')} Docker Command: ${log.chalk.dim(dockerBuildCommand)}`);
 
   if (finalDockerfileSourcePath) {
-    log.info(`-> Dockerfile: ${log.chalk.green(finalDockerfileSourcePath)}`);
+    log.info(`${log.chalk.gray.dim('├─')} Dockerfile: ${log.chalk.green(finalDockerfileSourcePath)}`);
   }
 
-  log.info(`-> Entrypoint: ${log.chalk.green(entry)}`);
-  log.info(`-> Node Version: ${log.chalk.green(nodeVersion)}`);
-  log.info(`-> Lockfile: ${log.chalk[hasLockfile ? 'green' : 'yellow'](String(hasLockfile))}`);
-
   if (envVars.length > 0) {
-    log.info('-> Environment Variables:');
+    log.info(`${log.chalk.gray.dim('├─')} ${log.chalk.gray('Environment Variables:')}`);
 
-    envVars.forEach(varExpression => {
+    envVars.forEach((varExpression, index) => {
       const [key, value] = varExpression.split('=');
-      log.info(`  -  ${key}=${value}`);
+
+      if (index === envVars.length - 1) {
+        log.info(`${log.chalk.gray.dim('│  └─')} ${log.chalk.green(`${key}=${value}`)}`);
+      } else {
+        log.info(`${log.chalk.gray.dim('│  ├─')} ${log.chalk.green(`${key}=${value}`)}`);
+      }
     });
   }
 
   if (options.labels) {
-    log.info('- Labels:');
+    log.info(`${log.chalk.gray.dim('├─')} ${log.chalk.gray('Labels:')}`);
 
-    ensureArray<string>(options.labels).forEach(labelExpression => {
+    const labelsArray =  ensureArray<string>(options.labels);
+
+    labelsArray.forEach((labelExpression, index) => {
       const [key, value] = labelExpression.split('=');
-      log.info(`  - ${key}: ${value}`);
+
+      if (index === labelsArray.length - 1) {
+        log.info(`${log.chalk.gray.dim('│  └─')} ${log.chalk.green(`${key}=${value}`)}`);
+      } else {
+        log.info(`${log.chalk.gray.dim('│  ├─')} ${log.chalk.green(`${key}=${value}`)}`);
+      }
     });
   }
+
+  log.info(`${log.chalk.gray.dim('├─')} ${log.chalk.gray('Entrypoint:')} ${log.chalk.green(entry)}`);
+  log.info(`${log.chalk.gray.dim('├─')} ${log.chalk.gray('Node Version:')} ${log.chalk.green(nodeVersion)}`);
+  log.info(`${log.chalk.gray.dim('└─')} ${log.chalk.gray('Lockfile:')} ${log.chalk[hasLockfile ? 'green' : 'yellow'](String(hasLockfile))}`);
 
 
   // ----- [10] Pack Package ---------------------------------------------------
@@ -250,7 +269,7 @@ export default async function dockerize(options: DockerizeOptions) {
   log.info(`Building image ${log.chalk.cyan(tag)}...`);
 
   // Copy production-relevant package files to the staging directory.
-  await packAndExtractPackage(npm, pkg.root, stagingDir);
+  await copyPackFiles(pkg.root, stagingDir);
 
 
   // ----- [11] Build Image ----------------------------------------------------
@@ -268,7 +287,7 @@ export default async function dockerize(options: DockerizeOptions) {
   }
 
   if (buildProcess.stderr) {
-    buildProcess.stderr.pipe(log.createPipe('error'));
+    buildProcess.stderr.pipe(log.createPipe('silly'));
   }
 
   await buildProcess;
