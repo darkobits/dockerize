@@ -23,7 +23,7 @@ cli.command<DockerizeArguments>({
   command: '* [cwd]',
   builder: ({command}) => {
     command.positional('cwd', {
-      description: 'Directory of the project to Dockerize.',
+      description: 'Directory of the project to Dockerize. [Default: cwd]',
       type: 'string',
       required: false
     });
@@ -91,10 +91,10 @@ cli.command<DockerizeArguments>({
 
     command.option('dockerfile', {
       group: 'Advanced:',
-      description: 'Path to a custom Dockerfile to use.\n--node-version and --npmrc are moot when using this option.',
+      description: 'Path to a custom Dockerfile to use.',
       required: false,
       type: 'string',
-      conflicts: ['npmrc', 'nodeVersion']
+      conflicts: ['env', 'nodeVersion', 'npmrc']
     });
 
     command.example('$0', 'Dockerize the NodeJS project in the current directory using default options.');
@@ -141,4 +141,6 @@ cli.command<DockerizeArguments>({
 });
 
 
-cli.init();
+cli.init(yargs => {
+  yargs.scriptName(log.chalk.cyan('dockerize'));
+});
