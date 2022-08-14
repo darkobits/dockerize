@@ -4,7 +4,7 @@ import chex from '@darkobits/chex';
 import { dirname } from '@darkobits/fd-name';
 import fs from 'fs-extra';
 import emoji from 'node-emoji';
-import tempy from 'tempy';
+import { temporaryDirectory } from 'tempy';
 
 import {
   DEFAULT_TINI_VERSION,
@@ -52,11 +52,11 @@ export default async function dockerize(options: DockerizeOptions) {
   // ----- [2] Introspect Host Package -----------------------------------------
 
   // Get the path to the package's package.json and create the staging area.
-  const pkg = await pkgInfo({ cwd: options.cwd });
+  const pkg = await pkgInfo(options.cwd);
 
   // Compute path to the package's entrypoint ("bin" or "main"). This will be
   // used as the ENTRYPOINT in the final image.
-  const entry = computePackageEntry(pkg.package);
+  const entry = computePackageEntry(pkg.json);
 
 
   // ----- [3] Parse Options ---------------------------------------------------
@@ -69,7 +69,7 @@ export default async function dockerize(options: DockerizeOptions) {
   /**
    * Tag that will be applied to the image.
    */
-  const tag = computeTag(options.tag, pkg.package);
+  const tag = computeTag(options.tag, pkg.json);
 
   /**
    * Additional labels to apply to the image.
@@ -109,7 +109,7 @@ export default async function dockerize(options: DockerizeOptions) {
   // ----- [5] Prepare Staging Area --------------------------------------------
 
   // Get path to a random temporary directory we will use as our staging area.
-  const stagingDir = tempy.directory();
+  const stagingDir = temporaryDirectory();
   await fs.ensureDir(stagingDir);
 
 
@@ -213,7 +213,7 @@ export default async function dockerize(options: DockerizeOptions) {
 
   // ----- [9] Log Build Metadata ----------------------------------------------
 
-  log.info(`${emoji.get('whale')} Dockerizing package ${log.chalk.green(pkg.package.name)}.`);
+  log.info(`${emoji.get('whale')} Dockerizing package ${log.chalk.green(pkg.json.name)}.`);
 
   log.verbose(`${log.chalk.gray.dim('├─')} Package Root: ${log.chalk.green(pkg.root)}`);
   log.verbose(`${log.chalk.gray.dim('├─')} Staging Directory: ${log.chalk.green(stagingDir)}`);

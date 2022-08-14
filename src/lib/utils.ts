@@ -4,11 +4,15 @@ import chex from '@darkobits/chex';
 import nodeVersions from '@darkobits/node-versions';
 import bytes from 'bytes';
 import ejs from 'ejs';
-import findUp from 'find-up';
+import { findUp } from 'find-up';
 import fs from 'fs-extra';
 import npmPacklist from 'npm-packlist';
 import pMap from 'p-map';
-import readPkgUp, {NormalizedPackageJson, Options} from 'read-pkg-up';
+import {
+  readPackageUp,
+  type NormalizedPackageJson,
+  type Options
+} from 'read-pkg-up';
 
 import { DOCKER_IMAGE_PATTERN } from 'etc/constants';
 import { ThenArg } from 'etc/types';
@@ -50,7 +54,7 @@ export interface PkgInfoResult {
    * Object containing the parsed/normalized contents of the package's
    * package.json.
    */
-  package: NormalizedPackageJson;
+  json: NormalizedPackageJson;
 
   /**
    * Root directory of the package.
@@ -62,32 +66,17 @@ export interface PkgInfoResult {
 
 
 /**
- * Wraps `readPkgUp` and automatically throws if a package.json file could not
- * be found.
+ * Wraps `readPackageUp` and automatically throws if a package.json file could
+ * not be found.
  */
-export async function pkgInfo(opts?: Options): Promise<PkgInfoResult> {
-  const pkg = await readPkgUp({
-    ...opts,
-    // Even though this is `true` by default, we need it here because the
-    // typings for read-pkg-up are wonky and without it, we wont get the right
-    // type for our results.
-    normalize: true
-  });
+export async function pkgInfo(cwd: Options['cwd']): Promise<PkgInfoResult> {
+  const pkg = await readPackageUp({ cwd: cwd ?? process.cwd() });
 
   if (!pkg) {
-    if (opts?.cwd) {
-      throw new Error(`Unable to find a "package.json" for the package at ${opts.cwd}.`);
-    }
-
-    throw new Error('Unable to find a "package.json".');
+    throw new Error(`Unable to find a "package.json" from ${cwd}.`);
   }
 
-  const root = path.dirname(pkg.path);
-
-  return {
-    package: pkg.packageJson,
-    root
-  };
+  return { json: pkg.packageJson, root: path.dirname(pkg.path) };
 }
 
 
