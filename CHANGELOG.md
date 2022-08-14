@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/darkobits/dockerize/compare/v1.0.2...v2.0.0) (2022-08-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* This package is now pure ESM.
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([1c709d1](https://github.com/darkobits/dockerize/commit/1c709d1255cdfdcb9dfef2b6564aad32ff6346d1))
+
+
+### 🛠 Refactoring
+
+* Miscellaneous improvements. ([cd7014f](https://github.com/darkobits/dockerize/commit/cd7014f2f78e62ba19b3e26553cb416196dea37e))
+* Publish ESM. ([c527ef8](https://github.com/darkobits/dockerize/commit/c527ef827f88123bc71bf6202acf4fa7dcd70a15))
+* Use `npm-packlist` rather than `npm pack`. ([272a2c1](https://github.com/darkobits/dockerize/commit/272a2c1fa2f6fc6796d58f535a60ab5220f6ea03))
+
+
+### 📖 Documentation
+
+* Update README. ([9b94217](https://github.com/darkobits/dockerize/commit/9b94217b7a45f5ad284bb4ede09d3f7c5b8e12a2))
+* Update README. ([86ccf5c](https://github.com/darkobits/dockerize/commit/86ccf5c6c5fef8173b650686c3cae7a66de41b75))
+
 ### [1.0.2](https://github.com/darkobits/dockerize/compare/v1.0.1...v1.0.2) (2022-01-13)
 
 
