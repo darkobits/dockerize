@@ -12,9 +12,10 @@ Dockerize aims to make containerizing a Node project as straightforward as using
 No `Dockerfile` required.
 
 This project uses idiomatic standards (ie: `"files"`, `"main"`, `"bin"` in `package.json`) to determine
-which files in a project are production-relevant. It uses `npm pack` under the hood, which is what
-`npm publish` uses to create package tarballs. It uses sane defaults and adheres to best practices for
-containerizing Node applications.
+which files in a project are production-relevant. It uses [`npm-packlist`](https://github.com/npm/npm-packlist)
+under the hood, which is what `npm publish` uses to create package tarballs. It uses sane defaults and
+adheres to best practices for containerizing Node applications, but remains configurable for those with
+highly specific use cases.
 
 ## Install
 
@@ -25,14 +26,15 @@ dependency of an existing project.
 $ npm i --dev @darkobits/dockerize
 ```
 
-You must also have Docker installed on your system with the `docker` command in your `PATH`.
+You must also have Docker installed on your system with the `docker` command in your `$PATH`.
 
 ## Use
 
 Dockerize uses a project's `package.json` to infer which files should be included in images and which
 file to use as the image's [entrypoint](https://docs.docker.com/engine/reference/builder/#entrypoint).
 By default, it will use the first (or only) `"bin"` value, if present. Otherwise, it will use `"main"`.
-All files enumerated in `"files"` will be included in the image.
+All files enumerated in `"files"` will be included in the image. To produce a list of exactly what files
+will be added to images, run `npm pack --dry-run`.
 
 **Example:**
 
@@ -83,7 +85,7 @@ configuration file, which may be any of the following:
 
 ```yml
 node-version: '12.1.3'
-ubuntu-version: '19.04'
+ubuntu-version: '22.04'
 label:
   - rainbows=true
   - unicorns=true
@@ -117,8 +119,9 @@ Optional path to a custom `Dockerfile` to use. If not provided, Dockerize will l
 in the root of the build context (see `cwd` argument above). If the build context does not contain a
 `Dockerfile`, Dockerize will programmatically generate one for you with the following properties:
 
-* The [Ubuntu 22.04 image](https://hub.docker.com/_/ubuntu) will be used as a base, which is "minimal"
-  by default and therefore relatively small.
+* The [Ubuntu 22.04 image](https://hub.docker.com/_/ubuntu) will be used as a base for stage 1.
+* The [distroless base image](https://github.com/GoogleContainerTools/distroless) is used for stage 2,
+  producing a very compact image.
 * The [current LTS version of Node](https://nodejs.org) will be installed. (See `--node-version` below.)
 * The [Tini](https://github.com/krallin/tini) process manager will be installed and configured to ensure
   proper handling of POSIX signals. This is considered a best practice when using Node in Docker.
@@ -141,11 +144,11 @@ any leading `@`, and split the name into its scope (if applicable) and base name
 tokens are then used to construct the image's name, and are also available to the user to create a
 custom tag format using these data.
 
-|Token|Value|
-|:--|:--|
-|`{{packageName}}`|Non-scope segment of `name` from `package.json`.|
-|`{{packageScope}}`|Scope segment of `name` from `package.json`, sans `@`.|
-|`{{packageVersion}}`|`version` from `package.json`.|
+| Token                | Value                                                  |
+|:---------------------|:-------------------------------------------------------|
+| `{{packageName}}`    | Non-scope segment of `name` from `package.json`.       |
+| `{{packageScope}}`   | Scope segment of `name` from `package.json`, sans `@`. |
+| `{{packageVersion}}` | `version` from `package.json`.                         |
 
 The default tag format for scoped packages is: `{{packageScope}}/{{packageName}}:{{packageVersion}}`.
 
@@ -186,7 +189,8 @@ specific Node version, you may provide it using this flag.
 $ dockerize --node-version="14.15.0"
 ```
 
-**Note:** This argument is moot when the `--dockerfile` flag is used.
+> **Note**
+> This argument is moot when the `--dockerfile` flag is used.
 
 ### `--ubuntu-version`
 
@@ -201,7 +205,8 @@ Ubuntu version to use as a base image. This option supports any valid tag for th
 $ dockerize --ubuntu-version="latest"
 ```
 
-**Note:** This argument is moot when the `--dockerfile` flag is used.
+> **Note**
+> This argument is moot when the `--dockerfile` flag is used.
 
 ### `--npmrc`
 
@@ -220,10 +225,11 @@ dependencies, you may provide a path to this file using this argument.
 $ dockerize --npmrc="~/.npmrc"
 ```
 
-**Note:** If an `.npmrc` file is used, it will be deleted from the image once dependencies are
-installed.
+> **Note**
+> If an `.npmrc` file is used, it will be deleted from the image once dependencies are installed.
 
-**Note:** This argument is moot when the `--dockerfile` flag is used.
+> **Note**
+> This argument is moot when the `--dockerfile` flag is used.
 
 ### `--label`
 
@@ -254,6 +260,9 @@ value when using this argument is recommended.
 ```sh
 $ dockerize --env="RETICULATE_SPLINES=1"
 ```
+
+> **Note**
+> This argument is moot when the `--dockerfile` flag is used.
 
 ### `--extra-args`
 
