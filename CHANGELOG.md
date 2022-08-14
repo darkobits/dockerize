@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.1](https://github.com/darkobits/dockerize/compare/v2.0.0...v2.0.1) (2022-08-14)
+
+
+### 📖 Documentation
+
+* Update README. ([fda02fc](https://github.com/darkobits/dockerize/commit/fda02fc176acb73c55418bb5bff6700dfd5c7007))
+* Update README. ([c61a996](https://github.com/darkobits/dockerize/commit/c61a996d7174390100c50dfc3c5f83a670407a78))
+
+
+### 🛠 Refactoring
+
+* Use `distroless/base`. ([53d01bd](https://github.com/darkobits/dockerize/commit/53d01bde2bccc25fa5634324b1e9a2e901dee34e))
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([1d2fc91](https://github.com/darkobits/dockerize/commit/1d2fc91ffd62561a090cfc2bd1bca790331a221e))
+* Miscellaneous cleanup. ([62e3bef](https://github.com/darkobits/dockerize/commit/62e3bef3070f37b3bc3992ba97eee0f249ee238a))
+
 ## [2.0.0](https://github.com/darkobits/dockerize/compare/v1.0.2...v2.0.0) (2022-08-14)
 
 
