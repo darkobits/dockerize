@@ -4,6 +4,7 @@
   "description": "Easily Dockerize Node projects.",
   "license": "WTFPL",
   "author": "darkobits",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/darkobits/dockerize.git"
