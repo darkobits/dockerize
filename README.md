@@ -3,7 +3,7 @@
 </a>
 <p align="center">
   <a href="https://www.npmjs.com/package/@darkobits/dockerize"><img src="https://img.shields.io/npm/v/@darkobits/dockerize.svg?style=flat-square"></a>
-  <a href="https://github.com/darkobits/dockerize/actions?query=workflow%3ACI"><img src="https://img.shields.io/github/workflow/status/darkobits/dockerize/CI/master?style=flat-square"></a>
+  <a href="https://github.com/darkobits/dockerize/actions?query=workflow%3Aci"><img src="https://img.shields.io/github/workflow/status/darkobits/dockerize/ci/master?style=flat-square"></a>
   <a href="https://depfu.com/github/darkobits/dockerize"><img src="https://img.shields.io/depfu/darkobits/dockerize?style=flat-square"></a>
   <a href="https://conventionalcommits.org"><img src="https://img.shields.io/static/v1?label=commits&message=conventional&style=flat-square&color=398AFB"></a>
 </p>
