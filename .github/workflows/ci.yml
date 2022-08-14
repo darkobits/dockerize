@@ -1,24 +1,43 @@
 name: ci
 on:
-  - push
-  - pull_request
+  push:
+    paths-ignore:
+        - 'README.md'
+        - 'CHANGELOG.md'
+        - 'LICENSE'
+  pull_request:
+    paths-ignore:
+      - 'README.md'
+      - 'CHANGELOG.md'
+      - 'LICENSE'
 env:
   FORCE_COLOR: 3
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 jobs:
   ci:
     name: CI
+    if: github.event.ref_type != 'tag'
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch Repository
+      - name: Clone
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Set Up Node
-        uses: actions/setup-node@v1
+      - name: Prepare
+        uses: actions/setup-node@v2
         with:
           node-version: 16
           cache: npm
-      - name: Install Dependencies
-        run: npm ci
-      - name: Build Project
+      - name: Install
+        run: npm clean-install
+      - name: Build
         run: npx nr build
+      - name: Test
+        run: npx nr test
+      - name: Release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx nr release
