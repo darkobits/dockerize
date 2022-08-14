@@ -117,7 +117,7 @@ Optional path to a custom `Dockerfile` to use. If not provided, Dockerize will l
 in the root of the build context (see `cwd` argument above). If the build context does not contain a
 `Dockerfile`, Dockerize will programmatically generate one for you with the following properties:
 
-* The [Ubuntu 19.04 image](https://hub.docker.com/_/ubuntu) will be used as a base, which is "minimal"
+* The [Ubuntu 22.04 image](https://hub.docker.com/_/ubuntu) will be used as a base, which is "minimal"
   by default and therefore relatively small.
 * The [current LTS version of Node](https://nodejs.org) will be installed. (See `--node-version` below.)
 * The [Tini](https://github.com/krallin/tini) process manager will be installed and configured to ensure
