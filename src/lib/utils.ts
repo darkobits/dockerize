@@ -6,11 +6,12 @@ import bytes from 'bytes';
 import ejs from 'ejs';
 import findUp from 'find-up';
 import fs from 'fs-extra';
+import npmPacklist from 'npm-packlist';
+import pMap from 'p-map';
 import readPkgUp, {NormalizedPackageJson, Options} from 'read-pkg-up';
-import tar from 'tar';
 
-import {DOCKER_IMAGE_PATTERN} from 'etc/constants';
-import {ThenArg} from 'etc/types';
+import { DOCKER_IMAGE_PATTERN } from 'etc/constants';
+import { ThenArg } from 'etc/types';
 
 
 /**
@@ -153,24 +154,26 @@ export async function renderTemplate({template, dest, data}: RenderTemplateOptio
 
 
 /**
- * Provided a package's root directory and a target directory, packs the package
- * using `npm pack`, thereby collecting all relevant files needed for
- * production, then extracts the resulting tarball to the target directory.
+ * Provided a package's root directory and a target directory, gets a pack list
+ * and copies all files therein to the provided destination directory.
  */
-export async function packAndExtractPackage(npm: ThenArg<ReturnType<typeof chex>>, pkgRoot: string, destDir: string) {
-  // Use `npm pack` to create a tarball of all files that would normally be
-  // included when publishing the package.
-  const { stdout: tarballName } = await npm(['pack', '--ignore-scripts'], { cwd: pkgRoot });
+export async function copyPackFiles(pkgRoot: string, destDir: string) {
+  const files = await npmPacklist({ path: pkgRoot });
 
-  const tarballPath = path.resolve(pkgRoot, tarballName);
+  await pMap(files, async file => {
+    // N.B. `file` will be a relative path from the package root. Its absolute
+    // path can be computed by joining the two.
+    const srcPath = path.join(pkgRoot, file);
 
-  // Extract the NPM tarball to the staging area. By default, this will create a
-  // subdirectory there named 'package' containing the tarball contents.
-  await tar.extract({file: tarballPath, cwd: destDir});
+    // Compute the absolute destination path using the same logic.
+    const destPath = path.join(destDir, file);
 
-  // Delete the tarball now that we have copied relevant files to the staging
-  // area.
-  await fs.remove(tarballPath);
+    // Ensure the directory structure we need for the file exists.
+    await fs.ensureDir(path.dirname(destPath));
+
+    // Copy the file.
+    await fs.copyFile(srcPath, destPath);
+  });
 }
 
 
